@@ -45,6 +45,13 @@
   align-items: center;
   gap: 1rem;
 }
+
+.authorInfo{
+  display: flex;
+  flex-direction: column;
+
+
+}
 .author img{
   box-sizing: initial;
   width:  3rem;
