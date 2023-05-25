@@ -1,6 +1,6 @@
 
-import {Header} from "./components/Header";
-import {Post} from "./components/Post";
+import { Header } from "./components/Header";
+import { Post } from "./components/Post";
 import { Sidebar } from "./components/Sidebar";
 
 
@@ -21,12 +21,12 @@ const posts = [
       {type : 'paragraph', content: 'Fala galera'},
       {type : 'paragraph', content: 'Meu novo portifolio'},
     ],
-    publishAt: new Date('2023-05-15 20:00:00')
+    publishAt: new Date('2023-05-24 20:00:00')
   },
   {
     id:2,
     author:{
-      avatarUrl: 'https://www.github.com/rafaelbogfreitas.png',
+      avatarUrl: 'https://www.github.com/andrefarias11.png',
       name: 'Andre Farias',
       role: 'Developer Junior',
       
@@ -48,12 +48,9 @@ export function App() {
       <Sidebar/>
         <main>
           {posts.map(post => {
-            return (<Post 
-              author={post.author}
-              content={post.content}
-              publishAt={post.publishAt}
-            />
-            )
+            return (
+              <Post key={post.id} author = {post.author} content={post.content} publishAt={post.publishAt}/>
+            ) 
           })}
         </main>
       </div>

@@ -1,44 +1,76 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-key */
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
+import { format, formatDistanceToNow } from 'date-fns';
+import ptBR  from 'date-fns/locale/pt-BR';
 import style from './Post.module.css';
+import { useState } from 'react';
 
-export function Post(props) {
-  console.log(props)
+
+export function Post({author, publishAt, content}) {
+
+  const [comments, setComments] = useState([
+   'Post top',
+  ]);
+
+  const publishDateFormated = format(publishAt, "d 'de' LLLL 'as' HH:mm'h'",{locale: ptBR});
+
+  const publishDateRelativeToNow = formatDistanceToNow(publishAt,{
+    locale: ptBR,
+    addSuffix: true,
+  });
+
+
+  function handleCreatNewComment(){
+    event.preventDefault();
+
+
+    const newCommentText = event.target.comment.value;
+
+    setComments([...comments, newCommentText]);
+    event.target.comment.value = '';
+  }
+
+  
+
   return (
     <article className={style.post}>
       <header>
         <div className={style.author}>
-          <Avatar hasBorder src="https://github.com/andrefarias11.png" />
+          <Avatar src={author.avatarUrl} />
           <div className={style.authorInfo}>
-            <strong>André</strong>
-            <span>FullStack Developer</span>
+            <strong>{author.name}</strong>
+            <span>{author.role}</span>
           </div>
         </div>
 
 
 
-        <time title='10 de maio de 2023' dateTime='2023-05-10'>Publicado há 1 hora</time>
+        <time title={publishDateFormated} dateTime={publishAt.toISOString()}>
+        {publishDateRelativeToNow}
+        </time>
+
+
       </header>
 
       <div className={style.content}>
-        <p>
-          Fala Galera beleza? Estou fazendo um curso de ReactJS e estou aprendendo bastante!
-        </p>
-        <p>
-        Segue meu link do meu repositorio:
-        </p>
-        <p><a href="https://github.com/andrefarias11/Ignite-Rocketseat">github.com/andrefarias11/Ignite-Rocketseat</a> </p>
-        <p> 
-          <a href="#"> #Rocktseat</a>{'   '}
-          <a href="#"> #Ignite</a>{' '} 
-          <a href="#"> #NewProject</a>
-        </p>
+      {content.map(line => {
+        if(line.type === 'paragraph'){
+          return <p>{line.content}</p>;
+        }else if(line.type === 'link'){
+          return <p><a href="#">{line.content}</a></p>;
+        }
+      })}
       </div>
 
 
-      <form className={style.commentForm}>
+      <form onSubmit={handleCreatNewComment} className={style.commentForm}>
         <strong>Deixe seu Feedback</strong>
-        <textarea placeholder='Deixe seu comentario'/>
+        <textarea 
+        name='comment'
+        placeholder='Deixe seu comentario'/>
 
         <footer>
           <button type='submit'>Publicar</button>
@@ -46,9 +78,9 @@ export function Post(props) {
       </form>
 
       <div className={style.commentList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {comments.map(comment => {
+          return <Comment content={comment}/>
+        })}
 
       </div>
       
